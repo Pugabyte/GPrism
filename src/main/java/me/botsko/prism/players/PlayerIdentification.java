@@ -32,14 +32,13 @@ public class PlayerIdentification {
             prismPlayer = comparePlayerToCache( player, prismPlayer );
             Prism.debug("Loaded player " + player.getName() + ", id: " + prismPlayer.getId() + " into the cache.");
             Prism.prismPlayers.put( player.getUniqueId(), prismPlayer );
-            return prismPlayer;
+            return null;
         }
 
         // Player is new, create a record for them
-        prismPlayer = addPlayer( player );
+        addPlayer( player );
 
-        return prismPlayer;
-
+        return null;
     }
 
     /**
@@ -204,35 +203,37 @@ public class PlayerIdentification {
     protected static PrismPlayer addPlayer( Player player ){
         String prefix = Prism.config.getString("prism.mysql.prefix");
 
-        PrismPlayer prismPlayer = new PrismPlayer( 0, player.getUniqueId(), player.getName() );
+        // Causes crashing, offload to separate thread
+        Bukkit.getScheduler().runTaskAsynchronously(Prism.getInstance(), () -> {
+            Connection conn = null;
+            PreparedStatement s = null;
+            ResultSet rs = null;
+            try {
+                conn = Prism.dbc();
+                if (conn == null) throw new SQLException("Insert statement failed - no generated key obtained.");
+                    s = conn.prepareStatement( "INSERT INTO " + prefix + "players (player,player_uuid) VALUES (?,UNHEX(?))" , Statement.RETURN_GENERATED_KEYS);
+                    s.setString(1, player.getName() );
+                    s.setString(2, uuidToDbString( player.getUniqueId() ) );
+                    s.executeUpdate();
 
-        Connection conn = null;
-        PreparedStatement s = null;
-        ResultSet rs = null;
-        try {
+                    rs = s.getGeneratedKeys();
 
-            conn = Prism.dbc();
-            s = conn.prepareStatement( "INSERT INTO " + prefix + "players (player,player_uuid) VALUES (?,UNHEX(?))" , Statement.RETURN_GENERATED_KEYS);
-            s.setString(1, player.getName() );
-            s.setString(2, uuidToDbString( player.getUniqueId() ) );
-            s.executeUpdate();
-
-            rs = s.getGeneratedKeys();
-            if (rs.next()) {
-                prismPlayer.setId(rs.getInt(1));
-                Prism.debug("Saved and loaded player " + player.getName() + " (" + player.getUniqueId() + ") into the cache.");
-                Prism.prismPlayers.put( player.getUniqueId(), new PrismPlayer( rs.getInt(1), player.getUniqueId(), player.getName() ) );
-            } else {
-                throw new SQLException("Insert statement failed - no generated key obtained.");
+                    if (rs.next()) {
+                        Prism.debug("Saved and loaded player " + player.getName() + " (" + player.getUniqueId() + ") into the cache.");
+                        Prism.prismPlayers.put( player.getUniqueId(), new PrismPlayer( rs.getInt(1), player.getUniqueId(), player.getName() ) );
+                    } else {
+                        throw new SQLException("Insert statement failed - no generated key obtained.");
+                    }
+            } catch (SQLException e) {
+                Prism.getInstance().handleDatabaseException(e);
+            } finally {
+                if(rs != null) try { rs.close(); } catch (SQLException e) {}
+                if(s != null) try { s.close(); } catch (SQLException e) {}
+                if(conn != null) try { conn.close(); } catch (SQLException e) {}
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if(rs != null) try { rs.close(); } catch (SQLException e) {}
-            if(s != null) try { s.close(); } catch (SQLException e) {}
-            if(conn != null) try { conn.close(); } catch (SQLException e) {}
-        }
-        return prismPlayer;
+        });
+
+        return null;
     }
 
 
@@ -255,6 +256,7 @@ public class PlayerIdentification {
         try {
 
             conn = Prism.dbc();
+            if (conn == null) throw new SQLException("Connection to database not found");
             s = conn.prepareStatement( "INSERT INTO " + prefix + "players (player,player_uuid) VALUES (?,UNHEX(?))" , Statement.RETURN_GENERATED_KEYS);
             s.setString(1, fakePlayer.getName() );
             s.setString(2, uuidToDbString( fakePlayer.getUUID() ) );
@@ -269,7 +271,7 @@ public class PlayerIdentification {
                 throw new SQLException("Insert statement failed - no generated key obtained.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Prism.getInstance().handleDatabaseException(e);
         } finally {
             if(rs != null) try { rs.close(); } catch (SQLException e) {}
             if(s != null) try { s.close(); } catch (SQLException e) {}
@@ -291,6 +293,7 @@ public class PlayerIdentification {
         try {
 
             conn = Prism.dbc();
+            if (conn == null) throw new SQLException("Connection to database not found");
             s = conn.prepareStatement( "UPDATE " + prefix + "players SET player = ?, player_uuid = UNHEX(?) WHERE player_id = ?");
             s.setString(1, prismPlayer.getName() );
             s.setString(2, uuidToDbString( prismPlayer.getUUID() ) );
@@ -298,7 +301,7 @@ public class PlayerIdentification {
             s.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Prism.getInstance().handleDatabaseException(e);
         } finally {
             if(s != null) try { s.close(); } catch (SQLException e) {}
             if(conn != null) try { conn.close(); } catch (SQLException e) {}
@@ -364,7 +367,6 @@ public class PlayerIdentification {
         }
         return prismPlayer;
     }
-
 
     /**
      * Build-load all online players into cache

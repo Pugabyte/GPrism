@@ -1,5 +1,6 @@
 package me.botsko.prism.actionlibs;
 
+import java.lang.management.BufferPoolMXBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import me.botsko.prism.Prism;
 import me.botsko.prism.actions.Handler;
 import me.botsko.prism.players.PlayerIdentification;
 import me.botsko.prism.players.PrismPlayer;
+import org.bukkit.Bukkit;
 
 public class RecordingTask implements Runnable {
 
@@ -387,37 +389,45 @@ public class RecordingTask implements Runnable {
         }
 
         String prefix = Prism.config.getString("prism.mysql.prefix");
-        final Connection conn = Prism.dbc();
-        try {
-            if (conn == null || conn.isClosed()) {
-                Prism.log( "Prism database error. Connection should be there but it's not. This action wasn't logged." );
-                return;
-            }
 
-            conn.setAutoCommit(false);
-            final PreparedStatement s = conn.prepareStatement("INSERT INTO " + prefix + "data_rollback (data_id,rollback) VALUES (?,?) ON DUPLICATE KEY UPDATE rollback = ?");
-            for (int id : dataIds) {
-                s.setInt(1, id);
-                if (isRestore) {
-                    s.setNull(2, java.sql.Types.TINYINT);
-                    s.setNull(3, java.sql.Types.TINYINT);
-                } else {
-                    s.setInt(2, 1);
-                    s.setInt(3, 1);
+        // Causes crashing, offload to separate thread
+        Bukkit.getScheduler().runTaskAsynchronously(Prism.getInstance(), () -> {
+            final Connection conn = Prism.dbc();
+            try {
+                if (conn == null || conn.isClosed()) {
+                    Prism.log( "Prism database error. Connection should be there but it's not. This action wasn't logged." );
+                    return;
                 }
-                s.addBatch();
+
+                conn.setAutoCommit(false);
+                final PreparedStatement s = conn.prepareStatement("INSERT INTO " + prefix + "data_rollback (data_id,rollback) VALUES (?,?) ON DUPLICATE KEY UPDATE rollback = ?");
+                for (int id : dataIds) {
+                    s.setInt(1, id);
+                    if (isRestore) {
+                        s.setNull(2, java.sql.Types.TINYINT);
+                        s.setNull(3, java.sql.Types.TINYINT);
+                    } else {
+                        s.setInt(2, 1);
+                        s.setInt(3, 1);
+                    }
+                    s.addBatch();
+                }
+                s.executeBatch();
+
+                if( conn.isClosed() ) {
+                    Prism.log( "Prism database error. We have to bail in the middle of building extra data bulk insert query." );
+                } else {
+                    conn.commit();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                if( conn != null )
+                    try {
+                        conn.close();
+                    } catch ( final SQLException ignored ) {}
             }
-
-            s.executeBatch();
-            conn.commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if( conn != null )
-                try {
-                    conn.close();
-                } catch ( final SQLException ignored ) {}
-        }
+        });
     }
 }

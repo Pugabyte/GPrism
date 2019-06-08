@@ -15,8 +15,6 @@ import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.inventory.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -289,7 +287,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit type of this action's entity, or null if invalid */
-    @Nullable
     public EntityType getEntityType()
     {
         try
@@ -347,7 +344,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit dye color of this action's entity */
-    @Nullable
     public DyeColor getColor()
     {
         return !Strings.isNullOrEmpty(actionData.color)
@@ -356,7 +352,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit profession of this action's villager */
-    @Nullable
     public Profession getProfession()
     {
         return !Strings.isNullOrEmpty(actionData.profession)
@@ -372,7 +367,6 @@ public class EntityAction extends GenericAction
             : 0;
     }
 
-    @Nullable
     public List<MerchantRecipe> getTrades()
     {
         if (actionData.trades == null)
@@ -413,28 +407,24 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Owner's name of this action's entity */
-    @Nullable
     public String getTamingOwner()
     {
         return actionData.taming_owner;
     }
 
     /** @return Owner's UUID of this action's entity */
-    @Nullable
     public UUID getTamingOwnerUUID()
     {
         return actionData.taming_owner_UUID;
     }
 
     /** @return Custom name this action's entity */
-    @Nullable
     public String getCustomName()
     {
         return actionData.custom_name;
     }
 
     /** @return Bukkit type of this action's cat */
-    @Nullable
     public Ocelot.Type getCatType()
     {
         return actionData.var != null
@@ -443,7 +433,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit type of this action's rabbit */
-    @Nullable
     public Rabbit.Type getRabbitType()
     {
         return actionData.var != null
@@ -452,7 +441,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit type of this action's rabbit */
-    @Nullable
     public Parrot.Variant getParrotType()
     {
         return actionData.var != null
@@ -461,7 +449,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Fancy name for this entity, based on its data */
-    @Nonnull
     @Override
     public String getNiceName()
     {
@@ -519,7 +506,6 @@ public class EntityAction extends GenericAction
      * @return Bukkit horse variant of this action's horse
      */
     @Deprecated
-    @Nullable
     public Variant getVariant()
     {
         return !Strings.isNullOrEmpty(actionData.var)
@@ -528,7 +514,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit horse color of this action's horse */
-    @Nullable
     public Horse.Color getHorseColor()
     {
         return !Strings.isNullOrEmpty(actionData.hColor)
@@ -537,7 +522,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit llama color of this action's llama */
-    @Nullable
     public Llama.Color getLlamaColor()
     {
         return !Strings.isNullOrEmpty(actionData.hColor)
@@ -546,7 +530,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit horse style of this action's horse */
-    @Nullable
     public Horse.Style getStyle()
     {
         return !Strings.isNullOrEmpty(actionData.style)
@@ -555,7 +538,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit item stack of this action's entity's saddle */
-    @Nullable
     public ItemStack getSaddle()
     {
         if ( Strings.isNullOrEmpty(actionData.saddle) )
@@ -569,7 +551,6 @@ public class EntityAction extends GenericAction
     }
 
     /** @return Bukkit item stack of this action's entity's armor */
-    @Nullable
     public ItemStack getArmor()
     {
         return !Strings.isNullOrEmpty(actionData.armor)

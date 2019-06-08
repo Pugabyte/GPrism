@@ -6,9 +6,9 @@
 
   <!-- Project properties -->
 
-  <groupId>me.botsko</groupId>
+  <groupId>io.github.wispoffates</groupId>
   <artifactId>prism</artifactId>
-  <version>1.12-2.0.12</version>
+  <version>1.12-2.0.13</version>
 
   <name>Prism</name>
   <description>
@@ -83,7 +83,7 @@
       <email>syokkendesuyo@gmail.com</email>
       <url>https://github.com/syokkendesuyo</url>
     </developer>
-    <!-- Current maintainer of GPrism fork -->
+    <!-- previous maintainer of GPrism fork -->
     <developer>
       <name>Roy Curtis</name>
       <email>roy.adrian.curtis+github@gmail.com</email>
@@ -104,11 +104,6 @@
       <id>sk89q-repo</id>
       <url>http://maven.sk89q.com/repo/</url>
     </repository>
-    <!-- For Fanciful dependency -->
-    <repository>
-      <id>fanciful-mvn-repo</id>
-      <url>http://repo.stealthyone.com/content/groups/public/</url>
-    </repository>
   </repositories>
 
   <dependencies>
@@ -116,14 +111,14 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.12-R0.1-SNAPSHOT</version>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>com.sk89q</groupId>
-      <artifactId>worldedit</artifactId>
-      <version>6.0.0-SNAPSHOT</version>
+      <groupId>com.sk89q.worldedit</groupId>
+      <artifactId>worldedit-bukkit</artifactId>
+      <version>6.1.4</version>
       <scope>provided</scope>
     </dependency>
 
@@ -134,12 +129,6 @@
       <scope>compile</scope>
     </dependency>
 
-    <dependency>
-      <groupId>mkremins</groupId>
-      <artifactId>fanciful</artifactId>
-      <version>0.3.3-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
   </dependencies>
 
   <!-- Project settings -->
@@ -209,7 +198,6 @@
             <includes>
               <include>org.apache.tomcat:tomcat-jdbc</include>
               <include>org.apache.tomcat:tomcat-juli</include>
-              <include>mkremins:fanciful</include>
             </includes>
           </artifactSet>
 
@@ -227,11 +215,6 @@
               <shadedPattern>com.helion3.prism.libs.org.apache.juli</shadedPattern>
             </relocation>
 
-            <!-- Fanciful dependency -->
-            <relocation>
-              <pattern>mkremins.fanciful</pattern>
-              <shadedPattern>com.helion3.prism.libs.mkremins.fanciful</shadedPattern>
-            </relocation>
           </relocations>
         </configuration>
 

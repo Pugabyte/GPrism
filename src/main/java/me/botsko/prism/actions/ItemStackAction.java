@@ -65,12 +65,12 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-	 * 
+	 *
 	 */
     protected ItemStack item;
 
     /**
-	 * 
+	 *
 	 */
     protected ItemStackActionData actionData;
 
@@ -94,7 +94,7 @@ public class ItemStackAction extends GenericAction {
 
         // Necessary because enchant-item event doesn't directly apply the new enchants
         if (enchantments != null)
-            this.item.addEnchantments(enchantments);
+            this.item.addUnsafeEnchantments(enchantments);
 
         if ( item.hasItemMeta() )
         {
@@ -124,7 +124,7 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-	 * 
+	 *
 	 */
     @Override
     public void setData(String data) {
@@ -248,14 +248,14 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-	 * 
+	 *
 	 */
     public ItemStackActionData getActionData() {
         return this.actionData;
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ItemStack getItem() {
@@ -263,7 +263,7 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -277,7 +277,7 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-	 * 
+	 *
 	 */
     @Override
     public ChangeResult applyRollback(Player player, QueryParameters parameters, boolean is_preview) {
@@ -285,7 +285,7 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-	 * 
+	 *
 	 */
     @Override
     public ChangeResult applyRestore(Player player, QueryParameters parameters, boolean is_preview) {
@@ -293,7 +293,7 @@ public class ItemStackAction extends GenericAction {
     }
 
     /**
-     * 
+     *
      * @return
      */
     protected ChangeResult placeItems(Player player, QueryParameters parameters, boolean is_preview) {

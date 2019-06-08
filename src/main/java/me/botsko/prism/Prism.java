@@ -79,6 +79,7 @@ public class Prism extends JavaPlugin {
      * Public
      */
     public Prism prism;
+    public static Prism instance;
     public static Messenger messenger;
     public static FileConfiguration config;
     public static WorldEditPlugin plugin_worldEdit = null;
@@ -115,6 +116,21 @@ public class Prism extends JavaPlugin {
      * water for boats
      */
     public ConcurrentHashMap<String, String> preplannedVehiclePlacement = new ConcurrentHashMap<>();
+
+    public Prism() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static Prism getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException();
+        }
+        return instance;
+    }
 
     /**
      * Enables the plugin and activates our player listeners
@@ -256,7 +272,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static String getPrismName() {
@@ -264,7 +280,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getPrismVersion() {
@@ -304,7 +320,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public DataSource initDbPool() {
@@ -312,9 +328,9 @@ public class Prism extends JavaPlugin {
         DataSource pool = null;
 
         final String dns = "jdbc:mysql://" + config.getString( "prism.mysql.hostname" ) + ":"
-                + config.getString( "prism.mysql.port" ) + "/" + config.getString( "prism.mysql.database" ) 
-                + "?useUnicode=true" 
-                + "&characterEncoding=UTF-8" 
+                + config.getString( "prism.mysql.port" ) + "/" + config.getString( "prism.mysql.database" )
+                + "?useUnicode=true"
+                + "&characterEncoding=UTF-8"
                 + "&verifyServerCertificate=" + ( config.getBoolean( "prism.mysql.verify-server-certificate" ) ? "true" : "false")
                 + "&useSSL=" + ( config.getBoolean( "prism.mysql.use-ssl" ) ? "true" : "false")
                 + "&useCursorFetch=" + ( config.getBoolean( "prism.mysql.use-cursor-fetch" ) ? "true" : "false");;
@@ -349,7 +365,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static DataSource getPool() {
@@ -357,7 +373,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      * @throws SQLException
      */
@@ -376,7 +392,7 @@ public class Prism extends JavaPlugin {
 
     /**
      * Attempt to reconnect to the database
-     * 
+     *
      * @return
      * @throws SQLException
      */
@@ -392,7 +408,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void handleDatabaseException(SQLException e) {
         String prefix = config.getString("prism.mysql.prefix");
@@ -411,7 +427,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      */
     protected void setupDatabase() {
         String prefix = config.getString("prism.mysql.prefix");
@@ -523,7 +539,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     protected void cacheActionPrimaryKeys() {
         String prefix = config.getString("prism.mysql.prefix");
@@ -608,7 +624,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     protected void cacheWorldPrimaryKeys() {
         String prefix = config.getString("prism.mysql.prefix");
@@ -689,7 +705,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Language getLang() {
@@ -697,7 +713,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void checkPluginDependancies() {
 
@@ -705,22 +721,22 @@ public class Prism extends JavaPlugin {
         final Plugin we = getServer().getPluginManager().getPlugin( "WorldEdit" );
         if( we != null ) {
             plugin_worldEdit = (WorldEditPlugin) we;
-            
+
             //Easier and foolproof way.
-            try { 
+            try {
                 WorldEdit.getInstance().getEventBus().register(new PrismBlockEditHandler());
                 log( "WorldEdit found. Associated features enabled." );
             } catch (Throwable error) {
                 log( "Required WorldEdit version is 6.0.0 or greater! Certain optional features of Prism disabled." );
             }
-            
+
         } else {
             log( "WorldEdit not found. Certain optional features of Prism disabled." );
         }
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean dependencyEnabled(String pluginName) {
@@ -728,7 +744,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static ArrayList<Integer> getIllegalBlocks() {
@@ -736,21 +752,21 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public static ArrayList<String> getIllegalEntities() {
         return illegalEntities;
     }
 
     /**
-	 * 
+	 *
 	 */
     public static HashMap<String, String> getAlertedOres() {
         return alertedOres;
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static MaterialAliases getItems() {
@@ -758,7 +774,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static ActionRegistry getActionRegistry() {
@@ -766,7 +782,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static HandlerRegistry<?> getHandlerRegistry() {
@@ -774,7 +790,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static Ignore getIgnore() {
@@ -782,7 +798,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public PurgeManager getPurgeManager() {
@@ -791,10 +807,10 @@ public class Prism extends JavaPlugin {
 
     /**
      * Registers a parameter and a handler. Example:
-     * 
+     *
      * pr l a:block-break. The "a" is an action, and the action handler will
      * process what "block-break" refers to.
-     * 
+     *
      * @param handler
      */
     public static void registerParameter(PrismParameterHandler handler) {
@@ -802,7 +818,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static HashMap<String, PrismParameterHandler> getParameters() {
@@ -810,7 +826,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static PrismParameterHandler getParameter(String name) {
@@ -818,7 +834,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void endExpiredQueryCaches() {
         getServer().getScheduler().scheduleSyncRepeatingTask( this, new Runnable() {
@@ -838,7 +854,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void endExpiredPreviews() {
         getServer().getScheduler().scheduleSyncRepeatingTask( this, new Runnable() {
@@ -863,7 +879,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void removeExpiredLocations() {
         getServer().getScheduler().scheduleSyncRepeatingTask( this, new Runnable() {
@@ -883,7 +899,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void actionRecorderTask() {
         int recorder_tick_delay = getConfig().getInt( "prism.queue-empty-tick-delay" );
@@ -896,7 +912,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void launchScheduledPurgeManager() {
         final List<String> purgeRules = getConfig().getStringList( "prism.db-records-purge-rules" );
@@ -908,7 +924,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-	 * 
+	 *
 	 */
     public void launchInternalAffairs() {
         final InternalAffairs recordingMonitor = new InternalAffairs( this );
@@ -916,7 +932,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @param msg
      */
     public void alertPlayers(Player player, String msg) {
@@ -929,7 +945,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String msgMissingArguments() {
@@ -937,7 +953,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String msgInvalidArguments() {
@@ -945,7 +961,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String msgInvalidSubcommand() {
@@ -953,7 +969,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String msgNoPermission() {
@@ -961,7 +977,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @param player
      * @param msg
      */
@@ -978,7 +994,7 @@ public class Prism extends JavaPlugin {
 
 
     /**
-     * 
+     *
      * @param message
      */
     public static void log(String message) {
@@ -986,7 +1002,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @param messages
      */
     public static void logSection(String[] messages) {
@@ -1000,7 +1016,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @param message
      */
     public static void debug(String message) {
@@ -1010,7 +1026,7 @@ public class Prism extends JavaPlugin {
     }
 
     /**
-     * 
+     *
      * @param loc
      */
     public static void debug(Location loc) {
