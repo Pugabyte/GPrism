@@ -1,81 +1,77 @@
 package me.botsko.prism.events;
 
-import java.util.ArrayList;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.ArrayList;
+
 public class PrismBlocksDrainEvent extends Event {
 
-    /**
-     * Required by bukkit for proper event handling.
-     */
-    private static final HandlerList handlers = new HandlerList();
+	/**
+	 * Required by bukkit for proper event handling.
+	 */
+	private static final HandlerList handlers = new HandlerList();
+	/**
+	 *
+	 */
+	protected final int radius;
+	/**
+	 *
+	 */
+	private final ArrayList<BlockStateChange> blockStateChanges;
+	/**
+	 *
+	 */
+	private final Player onBehalfOf;
 
-    /**
-     * 
-     */
-    private final ArrayList<BlockStateChange> blockStateChanges;
+	/**
+	 * @param blockStateChanges
+	 * @param onBehalfOf
+	 * @param radius
+	 */
+	public PrismBlocksDrainEvent(ArrayList<BlockStateChange> blockStateChanges, Player onBehalfOf, int radius) {
+		this.blockStateChanges = blockStateChanges;
+		this.onBehalfOf = onBehalfOf;
+		this.radius = radius;
+	}
 
-    /**
-     * 
-     */
-    private final Player onBehalfOf;
+	/**
+	 * Required by bukkit for proper event handling.
+	 *
+	 * @return
+	 */
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    /**
-     * 
-     */
-    protected final int radius;
+	/**
+	 * @return the originalBlock
+	 */
+	public ArrayList<BlockStateChange> getBlockStateChanges() {
+		return blockStateChanges;
+	}
 
-    /**
-     * 
-     * @param blockStateChanges
-     * @param onBehalfOf
-     * @param radius
-     */
-    public PrismBlocksDrainEvent(ArrayList<BlockStateChange> blockStateChanges, Player onBehalfOf, int radius) {
-        this.blockStateChanges = blockStateChanges;
-        this.onBehalfOf = onBehalfOf;
-        this.radius = radius;
-    }
+	/**
+	 * @return the onBehalfOf
+	 */
+	public Player onBehalfOf() {
+		return onBehalfOf;
+	}
 
-    /**
-     * @return the originalBlock
-     */
-    public ArrayList<BlockStateChange> getBlockStateChanges() {
-        return blockStateChanges;
-    }
+	/**
+	 * @return
+	 */
+	public int getRadius() {
+		return radius;
+	}
 
-    /**
-     * @return the onBehalfOf
-     */
-    public Player onBehalfOf() {
-        return onBehalfOf;
-    }
+	/**
+	 * Required by bukkit for proper event handling.
+	 */
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public int getRadius() {
-        return radius;
-    }
-
-    /**
-     * Required by bukkit for proper event handling.
-     */
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    /**
-     * Required by bukkit for proper event handling.
-     * 
-     * @return
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
 }

@@ -71,7 +71,7 @@
       <name>vcdf</name>
       <url>https://github.com/vcdf</url>
     </developer>
-    <!-- SSL fixes and bug reporting -->
+    <!-- 1.14 update -->
     <developer>
       <name>Pugabyte</name>
       <email>pugabyte@bear-nation.net</email>
@@ -99,11 +99,6 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
-    <!-- For WorldEdit API -->
-    <repository>
-      <id>sk89q-repo</id>
-      <url>http://maven.sk89q.com/repo/</url>
-    </repository>
   </repositories>
 
   <dependencies>
@@ -111,22 +106,20 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sk89q.worldedit</groupId>
-      <artifactId>worldedit-bukkit</artifactId>
-      <version>6.1.4</version>
+      <version>1.14.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-jdbc</artifactId>
-      <version>7.0.52</version>
+      <version>7.0.96</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.11</version>
     </dependency>
 
   </dependencies>

@@ -1,100 +1,97 @@
 package me.botsko.prism.events;
 
-import java.util.ArrayList;
-
 import me.botsko.prism.actionlibs.QueryParameters;
 import me.botsko.prism.appliers.ApplierResult;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.ArrayList;
+
 public class PrismBlocksRollbackEvent extends Event {
 
-    /**
-     * Required by bukkit for proper event handling.
-     */
-    private static final HandlerList handlers = new HandlerList();
+	/**
+	 * Required by bukkit for proper event handling.
+	 */
+	private static final HandlerList handlers = new HandlerList();
 
-    /**
-     * 
-     */
-    private final ArrayList<BlockStateChange> blockStateChanges;
+	/**
+	 *
+	 */
+	private final ArrayList<BlockStateChange> blockStateChanges;
 
-    /**
-     * 
-     */
-    private final Player onBehalfOf;
+	/**
+	 *
+	 */
+	private final Player onBehalfOf;
 
-    /**
-     * 
-     */
-    private final QueryParameters parameters;
+	/**
+	 *
+	 */
+	private final QueryParameters parameters;
 
-    /**
-     * 
-     */
-    private final ApplierResult result;
+	/**
+	 *
+	 */
+	private final ApplierResult result;
 
-    /**
-     * 
-     * @param blockStateChanges
-     * @param onBehalfOf
-     * @param parameters
-     * @param result
-     */
-    public PrismBlocksRollbackEvent(ArrayList<BlockStateChange> blockStateChanges, Player onBehalfOf,
-            QueryParameters parameters, ApplierResult result) {
-        this.blockStateChanges = blockStateChanges;
-        this.onBehalfOf = onBehalfOf;
-        this.parameters = parameters;
-        this.result = result;
-    }
+	/**
+	 * @param blockStateChanges
+	 * @param onBehalfOf
+	 * @param parameters
+	 * @param result
+	 */
+	public PrismBlocksRollbackEvent(ArrayList<BlockStateChange> blockStateChanges, Player onBehalfOf,
+									QueryParameters parameters, ApplierResult result) {
+		this.blockStateChanges = blockStateChanges;
+		this.onBehalfOf = onBehalfOf;
+		this.parameters = parameters;
+		this.result = result;
+	}
 
-    /**
-     * @return the originalBlock
-     */
-    public ArrayList<BlockStateChange> getBlockStateChanges() {
-        return blockStateChanges;
-    }
+	/**
+	 * Required by bukkit for proper event handling.
+	 *
+	 * @return
+	 */
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    /**
-     * @return the onBehalfOf
-     */
-    public Player onBehalfOf() {
-        return onBehalfOf;
-    }
+	/**
+	 * @return the originalBlock
+	 */
+	public ArrayList<BlockStateChange> getBlockStateChanges() {
+		return blockStateChanges;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public QueryParameters getQueryParameters() {
-        return parameters;
-    }
+	/**
+	 * @return the onBehalfOf
+	 */
+	public Player onBehalfOf() {
+		return onBehalfOf;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public ApplierResult getResult() {
-        return result;
-    }
+	/**
+	 * @return
+	 */
+	public QueryParameters getQueryParameters() {
+		return parameters;
+	}
 
-    /**
-     * Required by bukkit for proper event handling.
-     */
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+	/**
+	 * @return
+	 */
+	public ApplierResult getResult() {
+		return result;
+	}
 
-    /**
-     * Required by bukkit for proper event handling.
-     * 
-     * @return
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	/**
+	 * Required by bukkit for proper event handling.
+	 */
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
 }

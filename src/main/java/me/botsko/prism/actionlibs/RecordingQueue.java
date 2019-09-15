@@ -1,47 +1,30 @@
 package me.botsko.prism.actionlibs;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import me.botsko.prism.actions.Handler;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class RecordingQueue {
 
-    /**
-	 * 
-	 */
-    private static final LinkedBlockingQueue<Handler> queue = new LinkedBlockingQueue<>();
+	private static final LinkedBlockingQueue<Handler> queue = new LinkedBlockingQueue<>();
 
-    /**
-	 * 
-	 */
-    public static int getQueueSize() {
-        return queue.size();
-    }
+	public static int getQueueSize() {
+		return queue.size();
+	}
 
-    /**
-     * 
-     * @param a
-     */
-    public static void addToQueue(final Handler a) {
+	public static void addToQueue(final Handler a) {
 
-        if( a == null )
-            return;
+		if (a == null)
+			return;
 
-        // some basic sanity checks
-        if( a.getPlayerName().trim().isEmpty() )
-            return;
+		a.save();
 
-        a.save();
+		queue.add(a);
 
-        queue.add( a );
+	}
 
-    }
+	public static LinkedBlockingQueue<Handler> getQueue() {
+		return queue;
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public static LinkedBlockingQueue<Handler> getQueue() {
-        return queue;
-    }
 }

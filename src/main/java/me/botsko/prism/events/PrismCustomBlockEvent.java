@@ -1,5 +1,6 @@
 package me.botsko.prism.events;
 
+import me.botsko.prism.actionlibs.ActionType;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,76 +10,48 @@ import org.bukkit.plugin.Plugin;
 
 public class PrismCustomBlockEvent extends Event {
 
-    private static final HandlerList handlers = new HandlerList();
-    private final String plugin_name;
-    private final String action_type_name;
-    private final Player player;
-    private final Block block;
-    private final String message;
+	private static final HandlerList handlers = new HandlerList();
+	private final String plugin_name;
+	private final ActionType actionType;
+	private final Player player;
+	private final Block block;
+	private final String message;
 
-    /**
-     * @param plugin
-     * @param action_type_name
-     * @param player
-     * @param message
-     */
-    public PrismCustomBlockEvent(Plugin plugin, String action_type_name, Player player, Block block, String message) {
-        this.plugin_name = plugin.getName();
-        this.action_type_name = action_type_name;
-        this.player = player;
-        this.block = block;
-        this.message = message + ChatColor.GOLD + " [" + this.plugin_name + "]" + ChatColor.DARK_AQUA;
-    }
+	public PrismCustomBlockEvent(Plugin plugin, ActionType actionType, Player player, Block block, String message) {
+		this.plugin_name = plugin.getName();
+		this.actionType = actionType;
+		this.player = player;
+		this.block = block;
+		this.message = message + ChatColor.GOLD + " [" + this.plugin_name + "]" + ChatColor.DARK_AQUA;
+	}
 
-    /**
-     * @return
-     */
-    public String getPluginName() {
-        return plugin_name;
-    }
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    /**
-     * @return
-     */
-    public String getActionTypeName() {
-        return action_type_name;
-    }
+	public String getPluginName() {
+		return plugin_name;
+	}
 
-    /**
-     * @return the player
-     */
-    public Player getPlayer() {
-        return player;
-    }
+	public ActionType getActionType() {
+		return actionType;
+	}
 
-    /**
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
+	public Player getPlayer() {
+		return player;
+	}
 
-    /**
-     * @return the block
-     */
-    public Block getBlock() {
-        return block;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    /**
-     * Required by bukkit for proper event handling.
-     */
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+	public Block getBlock() {
+		return block;
+	}
 
-    /**
-     * Required by bukkit for proper event handling.
-     *
-     * @return
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
 }

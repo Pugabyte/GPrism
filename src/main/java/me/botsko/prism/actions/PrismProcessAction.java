@@ -4,64 +4,45 @@ import me.botsko.prism.Prism;
 import me.botsko.prism.appliers.PrismProcessType;
 
 public class PrismProcessAction extends GenericAction {
+	private PrismProcessActionData actionData;
 
-    public class PrismProcessActionData {
-        public String params = "";
-        public String processType;
-    }
+	public class PrismProcessActionData {
+		public String params = "";
+		public String processType;
+	}
 
-    /**
-	 * 
-	 */
-    private PrismProcessActionData actionData;
+	public void setProcessData(PrismProcessType processType, String parameters) {
+		actionData = new PrismProcessActionData();
 
-    /**
-     * 
-     * @param processType
-     * @param parameters
-     */
-    public void setProcessData(PrismProcessType processType, String parameters) {
+		if (processType != null) {
+			actionData.params = parameters;
+			actionData.processType = processType.name().toLowerCase();
+		}
+	}
 
-        actionData = new PrismProcessActionData();
+	@Override
+	public boolean hasExtraData() {
+		return actionData != null;
+	}
 
-        if( processType != null ) {
-            actionData.params = parameters;
-            actionData.processType = processType.name().toLowerCase();
-        }
-    }
+	@Override
+	public String serialize() {
+		return gson.toJson(actionData);
+	}
 
-    /**
-	 * 
-	 */
-    @Override
-    public void setData(String data) {
-        this.data = data;
-        if( data != null && !this.data.isEmpty() ) {
-            actionData = gson.fromJson( data, PrismProcessActionData.class );
-        }
-    }
+	@Override
+	public void deserialize(String data) {
+		if (data != null && !data.isEmpty()) {
+			actionData = gson.fromJson(data, PrismProcessActionData.class);
+		}
+	}
 
-    /**
-	 * 
-	 */
-    @Override
-    public void save() {
-        data = gson.toJson( actionData );
-    }
+	public String getProcessChildActionType() {
+		return Prism.getActionRegistry().getAction("prism-" + actionData.processType).getName();
+	}
 
-    /**
-     * 
-     * @return
-     */
-    public String getProcessChildActionType() {
-        return Prism.getActionRegistry().getAction( "prism-" + actionData.processType ).getName();
-    }
-
-    /**
-	 * 
-	 */
-    @Override
-    public String getNiceName() {
-        return actionData.processType + " (" + actionData.params + ")";
-    }
+	@Override
+	public String getNiceName() {
+		return actionData.processType + " (" + actionData.params + ")";
+	}
 }
